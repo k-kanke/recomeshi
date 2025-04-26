@@ -9,6 +9,7 @@ const items = {
 
 const SearchForm = () => {
     const [keyword, setKeyword] = useState('');
+    const [currentCategory, setCurrentCategory] = useState('');
 
     const handleClick = () => {
         if (keyword.trim() !== '') {
@@ -20,10 +21,16 @@ const SearchForm = () => {
 
     // カテゴリボタンを押した時
     const handleCategoryClick = (category) => {
+        setCurrentCategory(category); // 選択中カテゴリを記録！
+        proposeRandomItem(category);
+    };
+
+    // ランダムで食材提案
+    const proposeRandomItem = (category) => {
         const categoryItems = items[category];
         if (categoryItems && categoryItems.length > 0) {
-        const randomItem = categoryItems[Math.floor(Math.random() * categoryItems.length)];
-        setKeyword(randomItem);
+            const randomItem = categoryItems[Math.floor(Math.random() * categoryItems.length)];
+            setKeyword(randomItem);
         }
     };
 
@@ -42,6 +49,18 @@ const SearchForm = () => {
                     </button>
                 ))}
             </div>
+
+            {/* もう一回提案ボタン（今カテゴリ選んでる時だけ出す） */}
+            {currentCategory && (
+                <div style={{ marginBottom: '1rem' }}>
+                    <button
+                        onClick={() => proposeRandomItem(currentCategory)}
+                        style={{ padding: '0.5rem 1rem', backgroundColor: '#eee' }}
+                    >
+                        もう一回提案する
+                    </button>
+                </div>
+            )}
 
             {/* 検索ボックスとボタン */}
             <input
